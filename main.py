@@ -1,4 +1,4 @@
-from dash import Dash
+from dash import Dash, html, dcc, Input, Output
 from layout import layout
 from callbacks import register_callbacks
 
@@ -9,8 +9,7 @@ with open("assets/index.html", encoding="utf-8") as f:
 
 app.layout = layout
 
-
 register_callbacks(app)
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(debug=True)

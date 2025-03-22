@@ -3,9 +3,22 @@ from dash import dcc, html, dash_table
 import numpy as np
 import math
 import plotly.graph_objects as go
-from gradient import gradient_descent_method, generate_3d_surface
+from methods.gradient import gradient_descent_method, generate_3d_surface
+from layout import *
 
 def register_callbacks(app):
+    @app.callback(
+        Output('page-content', 'children'),
+        Input('task-selector', 'value')
+    )
+    def update_page(selected_task):
+        if selected_task == 'task1':
+            return layout_task1
+        elif selected_task == 'task2':
+            return layout_task2
+        else:
+            return html.Div("Задача не найдена")
+    
     @app.callback(
         [Output('result-output', 'children'),
          Output('surface-plot', 'figure'),
@@ -19,6 +32,7 @@ def register_callbacks(app):
          Input('epsilon2', 'value'),
          Input('max-iterations', 'value')]
     )
+        
     def run_gradient_descent(n_clicks, x1, x2, step, epsilon, epsilon1, epsilon2, max_iterations):
         fig = generate_3d_surface()  
 

@@ -67,11 +67,16 @@ def optimize(x0, coeffs_f, coeffs_con, opt_type):
 
 
 
-
 x0 = [1, 1]  
-coeffs_f = [0,-1,0,1,2]  
-coeffs_con = [3,2,6,1,2,4]
-result, success, message = optimize(x0, coeffs_f, coeffs_con, "maximize")
+coeffs_f = [2,2,2,-4,-6]  
+coeffs_con = [1,2,2,0,0,0]
+result, success, message = optimize(x0, coeffs_f, coeffs_con, "minimize")
+
+
+# x0 = [1, 1]  
+# coeffs_f = [0,-1,0,1,2]  
+# coeffs_con = [3,2,6,1,2,4]
+# result, success, message = optimize(x0, coeffs_f, coeffs_con, "maximize")
 
 
 """
