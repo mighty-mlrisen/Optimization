@@ -96,4 +96,3 @@ for res in result:
     print(f"iteration = {res['iteration']}")
     print(f"Точка: x1 = {res['x']}, x2 = {res['y']}")
     print(f"Значение функции: f_value = {res['f_value']}")
-

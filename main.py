@@ -1,5 +1,5 @@
 from dash import Dash, html, dcc, Input, Output
-from layout import layout
+from layouts.layout import layout
 from callbacks import register_callbacks
 
 app = Dash(__name__, suppress_callback_exceptions=True)

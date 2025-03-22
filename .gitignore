@@ -2,4 +2,6 @@ venv/
 .DS_Store
 .AppleDouble
 .LSOverride
-lab1/__pycache__
+__pycache__
+layouts/__pycache__
+methods/__pycache__

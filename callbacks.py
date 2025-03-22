@@ -4,7 +4,7 @@ import numpy as np
 import math
 import plotly.graph_objects as go
 from methods.gradient import gradient_descent_method, generate_3d_surface
-from layout import *
+from layouts.layout import *
 
 def register_callbacks(app):
     @app.callback(
