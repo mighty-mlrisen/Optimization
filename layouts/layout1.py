@@ -129,7 +129,7 @@ layout_task1 = html.Div(
                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)',
                     },
                     children=[
-                        dcc.Graph(id='surface-plot', style={'width': '100%', 'height': '500px'}),
+                        dcc.Graph(id='gradient-plot', style={'width': '100%', 'height': '500px'}),
                     ]
                 ),
             ]
@@ -146,11 +146,11 @@ layout_task1 = html.Div(
                 'box-sizing': 'border-box'
             },
             children=[
-                html.Div(id='result-output', style={
+                html.Div(id='gradient-result-output', style={
                     'margin-bottom': '20px',
                     'font-size': '16px',
                 }),
-                html.Div(id='iterations-table', style={
+                html.Div(id='gradient-table', style={
                     'width': '100%',
                     'overflowX': 'auto',
                 }),

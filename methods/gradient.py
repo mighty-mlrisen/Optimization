@@ -56,7 +56,7 @@ def gradient_descent_method(initial_point,step, epsilon, epsilon1, epsilon2, M):
         current_point = next_point
         k += 1
 
-def generate_3d_surface(path=None):
+def gradient_generate_3d_surface(path=None):
     x_vals = np.linspace(-3, 3, 100)
     y_vals = np.linspace(-3, 3, 100)
     X, Y = np.meshgrid(x_vals, y_vals)

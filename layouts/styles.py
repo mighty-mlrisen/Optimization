@@ -12,7 +12,8 @@ graph_style = {
     'padding': '20px',
     'border-radius': '8px',
     'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)',
-    'box-sizing': 'border-box'
+    'box-sizing': 'border-box',
+    'width': '100%',
 }
 
 button_style = {
@@ -34,5 +35,5 @@ bottom_style = {
     'padding': '20px',
     'border-radius': '8px',
     'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)',
-    'box-sizing': 'border-box'
+    'box-sizing': 'border-box',
 }
