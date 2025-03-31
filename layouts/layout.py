@@ -1,6 +1,7 @@
 from dash import html, dcc
 from layouts.layout1 import *
 from layouts.layout2 import *
+from layouts.layout3 import *
 
 layout = html.Div(
     style={
@@ -28,6 +29,7 @@ layout = html.Div(
                     options=[
                         {'label': 'Градиентный спуск', 'value': 'task1'},
                         {'label': 'Симплекс-метод', 'value': 'task2'},
+                        {'label': 'Генетический алгоритм', 'value': 'task3'},
                     ],
                     value='task1',
                     style={
