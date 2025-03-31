@@ -1,23 +1,6 @@
 import numpy as np
 
-rosenbrock = lambda x, y: (1-x)**2 + 100*((y-x**2)**2)
-
-def tournament_selection(population, fitness_values, tournament_size=2):
-    selected_parents = []
-    population_size = len(population)
-    
-    for _ in range(population_size):
-        # Случайно выбираем tournament_size особей для турнира
-        tournament_indices = np.random.choice(population_size, tournament_size, replace=False)
-        tournament_fitness = fitness_values[tournament_indices]
-        
-        # Выбираем особь с наилучшим значением fitness (для максимизации)
-        winner_index = tournament_indices[np.argmax(tournament_fitness)]
-        selected_parents.append(population[winner_index])
-    
-    return np.array(selected_parents)
-
-def optimize(objective_func, bounds, used_methods={"crossover": True, "mutation": True}, population_size=50, 
+def genetic_algorithm(objective_func, bounds, used_methods={"crossover": True, "mutation": True}, population_size=50, 
              crossover_prob=0.8, mutation_prob=0.1, mutation_parameter=3,
              max_iter=100, tol=1e-6, patience=25):
 
@@ -61,12 +44,23 @@ def optimize(objective_func, bounds, used_methods={"crossover": True, "mutation"
         })
         
         fitness = 1 / (1+objective_values)
+        fitness_sum = fitness.sum()
+        if fitness_sum == 0:
+            probabilities = np.ones(population_size) / population_size
+        else:
+            probabilities = fitness / fitness_sum
+        
+        for i in range(len(probabilities)):
+            if np.isnan(probabilities[i]):
+                probabilities[i] = 0
+
 
         # 3-6. Генерация нового поколения
         temporary_population = []
         while len(temporary_population) < population_size:
-            # Отбор родителей (турнирный метод)
-            parents = tournament_selection(population, fitness, tournament_size=2)
+            # Отбор родителей (метод рулетки)            
+            parents = population[np.random.choice(
+                population_size, 2, p=probabilities, replace=False)]
             
             # Промежуточная рекомбинация            
             if used_methods['crossover']:
@@ -102,8 +96,3 @@ def optimize(objective_func, bounds, used_methods={"crossover": True, "mutation"
     message = "Оптимум найден" if converged else "Достигнуто максимальное количество итераций"
     
     return history, converged, message
-
-bounds = [
-    [-3, 3],
-    [-3, 3]
-]

@@ -1,6 +1,5 @@
 import math
 import numpy as np
-import plotly.graph_objects as go
 
 #функция f(x) = 2*x_1^2 + x1*x2 + x_2^2
 def f(point):
@@ -55,42 +54,3 @@ def gradient_descent_method(initial_point,step, epsilon, epsilon1, epsilon2, M):
             
         current_point = next_point
         k += 1
-
-def gradient_generate_3d_surface(path=None):
-    x_vals = np.linspace(-3, 3, 100)
-    y_vals = np.linspace(-3, 3, 100)
-    X, Y = np.meshgrid(x_vals, y_vals)
-    
-    Z = 2 * X**2 + X * Y + Y**2
-    
-    fig = go.Figure(data=[go.Surface(z=Z, x=X, y=Y)])
-    
-    if path:
-        x_path = [point[0] for point in path]
-        y_path = [point[1] for point in path]
-        z_path = [2 * x**2 + x * y + y**2 for x, y in path]
-        
-        fig.add_trace(go.Scatter3d(
-            x=x_path,
-            y=y_path,
-            z=z_path,
-            mode="markers+lines",
-            marker=dict(size=5, color="red"),
-            name="Gradient Descent Path"
-        ))
-
-    fig.update_layout(
-        title={
-            'text': "функция f(x₁, x₂) = 2x₁² + x₁x₂ + x₂²",
-            'x': 0.5,
-            'font': {'size': 18}
-        },
-        scene=dict(
-            xaxis_title="x₁",
-            yaxis_title="x₂",
-            zaxis_title="f(x)"
-        )
-    )
-    
-    return fig
-

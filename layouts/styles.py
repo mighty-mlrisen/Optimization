@@ -6,6 +6,10 @@ input_style = {
     'box-sizing': 'border-box'
 }
 
+label_style = {
+    'min-width': '30px'
+}
+
 graph_style = {
     'flex': '1',
     'background-color': '#fff',
