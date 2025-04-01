@@ -65,11 +65,14 @@ def genetic_algorithm(objective_func, bounds, used_methods={"crossover": True, "
             # Промежуточная рекомбинация            
             if used_methods['crossover']:
                 if np.random.rand() < crossover_prob:
-                    alpha = np.random.uniform(-recombination_parameter, 
+                    alpha1 = np.random.uniform(-recombination_parameter, 
                                             1 + recombination_parameter, 
                                             size=parents[0].shape)
-                    child1 = parents[0] + alpha * (parents[1] - parents[0])
-                    child2 = parents[1] + alpha * (parents[0] - parents[1])
+                    alpha2 = np.random.uniform(-recombination_parameter, 
+                                            1 + recombination_parameter, 
+                                            size=parents[0].shape)
+                    child1 = parents[0] + alpha1 * (parents[1] - parents[0])
+                    child2 = parents[0] + alpha2 * (parents[1] - parents[0])
                 else:
                     child1, child2 = parents[0], parents[1]
             else:
