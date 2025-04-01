@@ -20,7 +20,7 @@ def genetic_algorithm(objective_func, bounds, used_methods={"crossover": True, "
     for iteration in range(max_iter):
         # 2. Вычисление пригодности
         objective_values = np.array([objective_func(ind[0], ind[1]) for ind in population])
-        
+        #print(objective_values)
         # Сохранение лучшей особи
         best_idx = np.argmin(objective_values)
         current_best = population[best_idx]
@@ -53,24 +53,32 @@ def genetic_algorithm(objective_func, bounds, used_methods={"crossover": True, "
         for i in range(len(probabilities)):
             if np.isnan(probabilities[i]):
                 probabilities[i] = 0
-
+        #print(probabilities)
 
         # 3-6. Генерация нового поколения
+        # Ваш код до изменений
+
         temporary_population = []
+        elitism_count = int(population_size * 0.1) 
+
+        sorted_population = sorted(zip(population, objective_values), key=lambda x: x[1])
+        best_individuals = [ind for ind, _ in sorted_population[:elitism_count]]
+
+        temporary_population.extend(best_individuals)
+
         while len(temporary_population) < population_size:
             # Отбор родителей (метод рулетки)            
             parents = population[np.random.choice(
                 population_size, 2, p=probabilities, replace=False)]
             
-            # Промежуточная рекомбинация            
             if used_methods['crossover']:
                 if np.random.rand() < crossover_prob:
                     alpha1 = np.random.uniform(-recombination_parameter, 
-                                            1 + recombination_parameter, 
-                                            size=parents[0].shape)
+                                                1 + recombination_parameter, 
+                                                size=parents[0].shape)
                     alpha2 = np.random.uniform(-recombination_parameter, 
-                                            1 + recombination_parameter, 
-                                            size=parents[0].shape)
+                                                1 + recombination_parameter, 
+                                                size=parents[0].shape)
                     child1 = parents[0] + alpha1 * (parents[1] - parents[0])
                     child2 = parents[0] + alpha2 * (parents[1] - parents[0])
                 else:
@@ -87,15 +95,19 @@ def genetic_algorithm(objective_func, bounds, used_methods={"crossover": True, "
                         child[0] += delta+0.5*(bounds[0][1]-bounds[0][0]) * ((-1) if np.random.rand()<=0.5 else 1)
                         child[1] += delta+0.5*(bounds[1][1]-bounds[1][0]) * ((-1) if np.random.rand()<=0.5 else 1)
                     
-                    # Проверка границ
+                    
                     child[0] = np.clip(child[0], bounds[0][0], bounds[0][1])
                     child[1] = np.clip(child[1], bounds[1][0], bounds[1][1])
                 temporary_population.append(child)
 
+        # Обновляем популяцию
         population = np.array(temporary_population)
+
 
     # Формирование результата
     converged = True
     message = "Оптимум найден" if converged else "Достигнуто максимальное количество итераций"
     
     return history, converged, message
+
+#genetic_algorithm(lambda x,y: x + y, [[-3,3],[-3,3]])
