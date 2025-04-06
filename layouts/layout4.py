@@ -128,6 +128,14 @@ layout_task4 = html.Div(
                                 dcc.Input(id='ps-penalty-ratio', type='number', placeholder='a5', value=10000, style=input_style, required=True),
                             ]
                         ),
+
+                        html.Div(
+                            style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
+                            children=[
+                                html.Label("Epsilon:", style={'margin': '10px', 'margin-left': '0px'}),
+                                dcc.Input(id='ps-eps', type='number', placeholder='a4', value=0.000001, style=input_style, required=True),
+                            ]
+                        ),
                         
                         html.Button('Запуск', id='run-button', style=button_style),
                     

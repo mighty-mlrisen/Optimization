@@ -287,11 +287,12 @@ def register_callbacks(app):
          Input('ps-current-velocity-ratio', 'value'),
          Input('ps-local-velocity-ratio', 'value'),
          Input('ps-global-velocity-ratio', 'value'), 
-         Input('ps-penalty-ratio', 'value')
+         Input('ps-penalty-ratio', 'value'),
+         Input('ps-eps', 'value')
          ]
     )
     
-    def run_particle_swarm(n_clicks, function, iter_count, swarm_size, x01, x02, y01, y02, current_velocity_ratio, local_velocity_ratio, global_velocity_ratio, penalty_ratio):
+    def run_particle_swarm(n_clicks, function, iter_count, swarm_size, x01, x02, y01, y02, current_velocity_ratio, local_velocity_ratio, global_velocity_ratio, penalty_ratio,eps):
         func = functions(function)
         fig = generate_3d_surface(func=func)
 
@@ -310,7 +311,7 @@ def register_callbacks(app):
         
         history, converged, message = particle_swarm(
             wrapped_func, iter_count, swarm_size, bounds, 
-            current_velocity_ratio, local_velocity_ratio, global_velocity_ratio, penalty_ratio
+            current_velocity_ratio, local_velocity_ratio, global_velocity_ratio, penalty_ratio, eps
             )
         
         last_item = history[-1]

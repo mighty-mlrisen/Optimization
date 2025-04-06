@@ -1,7 +1,7 @@
 from methods.particleswarm.swarm import Swarm
 import numpy as np
 
-def particle_swarm(func, iter_count, swarm_size, bounds, current_velocity_ratio, local_velocity_ratio, global_velocity_ratio, penalty_ratio):
+def particle_swarm(func, iter_count, swarm_size, bounds, current_velocity_ratio, local_velocity_ratio, global_velocity_ratio, penalty_ratio,tol):
     history = []
 
     swarm = Swarm (
@@ -14,9 +14,23 @@ def particle_swarm(func, iter_count, swarm_size, bounds, current_velocity_ratio,
             global_velocity_ratio,
             penalty_ratio,
         )
+    best_swarm_fitness = np.inf
+    patience = 25
+    no_improve = 0
     
     for i in range(iter_count):
         swarm.nextIteration()
+
+        current_value = swarm.globalBestFinalFunc
+
+        if abs(current_value - best_swarm_fitness) < tol:
+            no_improve += 1
+            if no_improve >= patience:
+                break
+        elif current_value < best_swarm_fitness:
+            no_improve = 0  
+            best_swarm_fitness = current_value
+
         history.append({
             'iteration': i+1,
             'x': swarm.globalBestPosition[0],
