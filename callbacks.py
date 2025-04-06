@@ -7,6 +7,7 @@ from methods.gradient import gradient_descent_method
 from methods.simplex_method import simplex_method
 from methods.genetic_algorithm import genetic_algorithm
 from methods.particle_swarm import particle_swarm
+from methods.bee_algorithm import bee_algorithm
 from layouts.layout import *
 from methods.surface import generate_3d_surface
 from dash.exceptions import PreventUpdate
@@ -39,6 +40,8 @@ def register_callbacks(app):
                 return layout_task3
             case 'task4':
                 return layout_task4
+            case 'task5':
+                return layout_task5
             case _:
                 return html.Div("Задача не найдена")
     
@@ -345,6 +348,92 @@ def register_callbacks(app):
                         "x": item["x"],
                         "y": item["y"],
                         "f_value": item["f_value"]
+                    }
+                    for item in history
+                ],
+                style_table={'height': '350px', 'overflowY': 'auto'},
+                style_cell={'padding': '10px', 'textAlign': 'center'},
+                style_header={'backgroundColor': '#f1f1f1', 'fontWeight': 'bold'}
+            )
+            return result_text, fig, table
+        else:
+            return html.Div(message, style={'color': 'red'}), fig, None
+    
+
+
+
+    # Алгоритм пчёл
+    @app.callback(
+        [Output('bee-result-output', 'children'),
+         Output('bee-plot', 'figure'),
+         Output('bee-table', 'children')],
+        [Input('run-button', 'n_clicks')],
+        [Input('bee-function', 'value'),
+         Input('bee-scout', 'value'),
+         Input('bee-selected', 'value'),
+         Input('bee-best', 'value'),
+         Input('bee-sel-sites', 'value'),
+         Input('bee-best-sites', 'value'),
+         Input('bee-range1', 'value'),
+         Input('bee-range2', 'value'),
+         Input('bee-x01', 'value'),
+         Input('bee-x02', 'value'), 
+         Input('bee-y01', 'value'),
+         Input('bee-y02', 'value'),
+         Input('bee-max-iter', 'value')
+         ]
+    )
+
+    def run_particle_swarm(n_clicks, function, scout_bee_count, selected_bee_count,best_bee_count,sel_sites_count,best_sites_count,range1,range2, x01,x02,y01,y02,max_iter):
+        func = functions(function)
+        fig = generate_3d_surface(func=func)
+        
+        range_list = [range1,range2]
+
+        minval = [x01,y01]
+        maxval = [x02,y02]   
+        
+        if n_clicks is None or n_clicks == 0:
+            return "", fig, None 
+        
+        wrapped_func = lambda pos: -func(*pos)
+        
+        history, converged, message = bee_algorithm(
+            wrapped_func, scout_bee_count,selected_bee_count,best_bee_count,sel_sites_count,
+            best_sites_count,range_list,minval,maxval,max_iter
+            )
+        
+        last_item = history[-1]
+        x = last_item['x']
+        y = last_item['y']
+        func_value = -last_item['f_value'] 
+        iteration = last_item['iteration']
+        
+        if converged == True:
+            path = [(item['x'], item['y']) for item in history]
+            
+            result_text = html.Div([
+                html.P(message, style={'margin': '5px 0', 'font-weight': 'bold'}),
+                html.P(f'Число итераций: {iteration}', style={'margin': '5px 0'}),
+                html.P(f'Точка минимума: ({x:.6f}, {y:.6f})', style={'margin': '5px 0'}),  
+                html.P(f'Значение функции: {func_value:.6f}', style={'margin': '5px 0', 'font-weight': 'bold'}),
+            ])
+            
+            fig = generate_3d_surface(func=func, path=path)
+            
+            table = dash_table.DataTable(
+                columns=[
+                    {'name': 'Итерация', 'id': 'iteration', 'type': 'numeric'},
+                    {'name': 'x', 'id': 'x', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                    {'name': 'y', 'id': 'y', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                    {'name': 'Значение функции', 'id': 'f_value', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                ],
+                data=[
+                    {
+                        "iteration": item["iteration"],
+                        "x": item["x"],
+                        "y": item["y"],
+                        "f_value": -item["f_value"]
                     }
                     for item in history
                 ],

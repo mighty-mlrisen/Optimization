@@ -1,5 +1,5 @@
 from typing import List
-from beehive.hive import Hive
+from methods.beehive.hive import Hive
 import numpy as np
 
 def bee_algorithm(
@@ -53,11 +53,13 @@ def bee_algorithm(
         prev_best_fitness = hive.best_fitness
         
         
-    
-    return history
+    converged = True
+    message = "Оптимум найден" if converged else "Достигнуто максимальное количество итераций"
+
+    return history, converged, message
 
 
-
+'''
 def rosenbrock(position):
     x, y = position
     return -((1-x)**2 + 100*((y-x**2)**2))
@@ -65,6 +67,7 @@ def rosenbrock(position):
 def rastrygin(position):
     x, y = position
     return -(20 + (x**2 - 10 * np.cos(2 * np.pi * x)) + (y**2 - 10 * np.cos(2 * np.pi * y)))
+
 
 scoutbeecount = 300
 selectedbeecount = 10
@@ -80,3 +83,4 @@ maxval = [20, 20]
 
 history = bee_algorithm(rosenbrock, scoutbeecount, selectedbeecount, bestbeecount, selsitescount, bestsitescount, range_list, minval, maxval, max_iter)
 print(history)
+'''

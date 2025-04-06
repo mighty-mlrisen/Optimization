@@ -1,5 +1,5 @@
 from typing import List, Optional
-from beehive.bee import FloatBee
+from methods.beehive.bee import FloatBee
 
 class Hive:
     """Улей. Управляет пчелами"""
