@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 import numpy
 import numpy.random
 
-from particleswarm.particle import Particle
+from methods.particleswarm.particle import Particle
 
 
 class Swarm (object):
