@@ -40,8 +40,8 @@ def bee_algorithm(
         else:
             no_improve = 0    
         
-        # if no_improve == 25:
-        #     break
+        if no_improve == 25:
+            break
         
         history.append({
             'iteration': iter + 1,

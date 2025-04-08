@@ -57,7 +57,7 @@ layout_task5 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Кол-во пчел-разведчиков:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bee-scout', type='number', placeholder='x10', value=300, style=input_style, required=True),
+                                dcc.Input(id='bee-scout', type='number', placeholder='x10', value=30, style=input_style, required=True),
                             ]
                         ),
 
@@ -65,7 +65,7 @@ layout_task5 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Кол-во пчел, отправляемых на лучшие участки:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bee-best', type='number', placeholder='x20', value=30, style=input_style, required=True),
+                                dcc.Input(id='bee-best', type='number', placeholder='x20', value=15, style=input_style, required=True),
                             ]
                         ),
 
@@ -73,7 +73,7 @@ layout_task5 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Кол-во пчел, отправляемых на другие выбранные участки:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bee-selected', type='number', placeholder='x20', value=10, style=input_style, required=True),
+                                dcc.Input(id='bee-selected', type='number', placeholder='x20', value=5, style=input_style, required=True),
                             ]
                         ),
 
@@ -81,7 +81,7 @@ layout_task5 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Кол-во выбранных участков:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bee-sel-sites', type='number', placeholder='x20', value=15, style=input_style, required=True),
+                                dcc.Input(id='bee-sel-sites', type='number', placeholder='x20', value=10, style=input_style, required=True),
                             ]
                         ),
                         
@@ -97,8 +97,8 @@ layout_task5 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Интервал области для участка:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bee-range1', type='number', placeholder='a1', value=100, style=input_style, required=True),
-                                dcc.Input(id='bee-range2', type='number', placeholder='a1', value=100, style=input_style, required=True),
+                                dcc.Input(id='bee-range1', type='number', placeholder='a1', value=0.05, style=input_style, required=True),
+                                dcc.Input(id='bee-range2', type='number', placeholder='a1', value=0.05, style=input_style, required=True),
                             ]
                         ),
 
@@ -106,8 +106,8 @@ layout_task5 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Интервал по x:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bee-x01', type='number', placeholder='a1', value=-20, style=input_style, required=True),
-                                dcc.Input(id='bee-x02', type='number', placeholder='a1', value=20, style=input_style, required=True),
+                                dcc.Input(id='bee-x01', type='number', placeholder='a1', value=-3, style=input_style, required=True),
+                                dcc.Input(id='bee-x02', type='number', placeholder='a1', value=3, style=input_style, required=True),
                             ]
                         ),
 
@@ -115,8 +115,8 @@ layout_task5 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Интервал по y:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bee-y01', type='number', placeholder='a1', value=-20, style=input_style, required=True),
-                                dcc.Input(id='bee-y02', type='number', placeholder='a1', value=20, style=input_style, required=True),
+                                dcc.Input(id='bee-y01', type='number', placeholder='a1', value=-3, style=input_style, required=True),
+                                dcc.Input(id='bee-y02', type='number', placeholder='a1', value=3, style=input_style, required=True),
                             ]
                         ),
 
