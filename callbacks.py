@@ -8,6 +8,7 @@ from methods.simplex_method import simplex_method
 from methods.genetic_algorithm import genetic_algorithm
 from methods.particle_swarm import particle_swarm
 from methods.bee_algorithm import bee_algorithm
+from methods.ais_algorithm import ais_optimize
 from layouts.layout import *
 from methods.surface import generate_3d_surface
 from dash.exceptions import PreventUpdate
@@ -42,6 +43,8 @@ def register_callbacks(app):
                 return layout_task4
             case 'task5':
                 return layout_task5
+            case 'task6':
+                return layout_task6
             case _:
                 return html.Div("Задача не найдена")
     
@@ -384,7 +387,7 @@ def register_callbacks(app):
          ]
     )
 
-    def run_particle_swarm(n_clicks, function, scout_bee_count, selected_bee_count,best_bee_count,sel_sites_count,best_sites_count,range1,range2, x01,x02,y01,y02,max_iter):
+    def run_bee_algorithm(n_clicks, function, scout_bee_count, selected_bee_count,best_bee_count,sel_sites_count,best_sites_count,range1,range2, x01,x02,y01,y02,max_iter):
         func = functions(function)
         fig = generate_3d_surface(func=func)
         
@@ -446,7 +449,83 @@ def register_callbacks(app):
             return html.Div(message, style={'color': 'red'}), fig, None
         
 
-
+    # Алгоритм искусственной имунной сети
+    @app.callback(
+        [Output('ais-result-output', 'children'),
+         Output('ais-plot', 'figure'),
+         Output('ais-table', 'children')],
+        [Input('run-button', 'n_clicks')],
+        [Input('ais-function', 'value'),
+         Input('ais-pop-size', 'value'),
+         Input('ais-n-b', 'value'),
+         Input('ais-n-c', 'value'),
+         Input('ais-n-d', 'value'),
+         Input('ais-alpha', 'value'),
+         Input('ais-range1', 'value'),
+         Input('ais-range2', 'value'),
+         Input('ais-max-iter', 'value')
+         ]
+    )
+    
+    def run_ais_algorithm(n_clicks, func, pop_size, n_b, n_c, n_d, alpha, range1, range2, generations):
+        func = functions(func)
+        funct = lambda pos: func(pos[0], pos[1])
+        
+        fig = generate_3d_surface(func=func)
+        bounds = [range1, range2]
+        
+        if n_clicks is None or n_clicks == 0:
+            return "", fig, None 
+        
+        history = ais_optimize(
+            funct,
+            dim=2,
+            pop_size=pop_size,
+            n_b=n_b,
+            n_c=n_c,
+            n_d=n_d,
+            alpha=alpha,
+            bounds=bounds,
+            generations=generations,
+            verbose=True
+        )
+        
+        converged = True
+        if converged == True:
+            path = [(item['x'], item['y']) for item in history]
+            
+            # result_text = html.Div([
+            #     html.P(message, style={'margin': '5px 0', 'font-weight': 'bold'}),
+            #     html.P(f'Число итераций: {iteration}', style={'margin': '5px 0'}),
+            #     html.P(f'Точка минимума: ({x:.6f}, {y:.6f})', style={'margin': '5px 0'}),  
+            #     html.P(f'Значение функции: {func_value:.6f}', style={'margin': '5px 0', 'font-weight': 'bold'}),
+            # ])
+            
+            fig = generate_3d_surface(func=func, path=path)
+            
+            table = dash_table.DataTable(
+                columns=[
+                    {'name': 'Итерация', 'id': 'iteration', 'type': 'numeric'},
+                    {'name': 'x', 'id': 'x', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                    {'name': 'y', 'id': 'y', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                    {'name': 'Значение функции', 'id': 'f_value', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                ],
+                data=[
+                    {
+                        "iteration": item["iteration"],
+                        "x": item["x"],
+                        "y": item["y"],
+                        "f_value": -item["f_value"]
+                    }
+                    for item in history
+                ],
+                style_table={'height': '350px', 'overflowY': 'auto'},
+                style_cell={'padding': '10px', 'textAlign': 'center'},
+                style_header={'backgroundColor': '#f1f1f1', 'fontWeight': 'bold'}
+            )
+            return "yes", fig, table
+        else:
+            return html.Div("no", style={'color': 'red'}), fig, None
         
 
         

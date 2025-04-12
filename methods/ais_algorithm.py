@@ -6,7 +6,6 @@ def rosenbrock(x):
 def simple_ais_iteration(func, population, n_b, n_c,n_d, alpha, bounds):
     
     """
-    
     Параметры:
     - func: функция.
     - population: текущая популяция.
