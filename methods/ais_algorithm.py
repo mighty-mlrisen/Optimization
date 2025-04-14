@@ -103,7 +103,7 @@ def ais_optimize(func, dim, pop_size=30, n_b=5, n_c=10,n_d=5, alpha=0.5,
     
     converged = True
     if converged:
-        message = f"Минимальное значение функции f(x) = {history[-1]['f_value']} найдено в точке ({history[-1]['x']}; {history[-1]['y']})."
+        message = "Оптимум найден"
     
     return history, converged, message
 

@@ -493,7 +493,7 @@ def register_callbacks(app):
         last_item = history[-1]
         x = last_item['x']
         y = last_item['y']
-        func_value = -last_item['f_value'] 
+        func_value = last_item['f_value'] 
         iteration = last_item['iteration']
         
         if converged == True:
