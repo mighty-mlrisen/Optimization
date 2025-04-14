@@ -23,7 +23,7 @@ graph_style = {
 button_style = {
     'width': '100%',
     'padding': '10px',
-    'margin-top': '10px',
+    'margin-top': 'auto',
     'background-color': '#000000',
     'color': 'white',
     'border': 'none',

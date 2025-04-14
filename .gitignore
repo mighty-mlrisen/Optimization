@@ -2,7 +2,8 @@ venv/
 .DS_Store
 .AppleDouble
 .LSOverride
-__pycache__
-layouts/__pycache__
-methods/beehive/__pycache__
-methods/particleswarm/__pycache__
+__pycache__/
+methods/__pycache__/
+layouts/__pycache__/
+methods/beehive/__pycache__/
+methods/particleswarm/__pycache__/

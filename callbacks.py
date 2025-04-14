@@ -477,7 +477,7 @@ def register_callbacks(app):
         if n_clicks is None or n_clicks == 0:
             return "", fig, None 
         
-        history = ais_optimize(
+        history, converged, message = ais_optimize(
             funct,
             dim=2,
             pop_size=pop_size,
@@ -490,16 +490,21 @@ def register_callbacks(app):
             verbose=True
         )
         
-        converged = True
+        last_item = history[-1]
+        x = last_item['x']
+        y = last_item['y']
+        func_value = -last_item['f_value'] 
+        iteration = last_item['iteration']
+        
         if converged == True:
             path = [(item['x'], item['y']) for item in history]
             
-            # result_text = html.Div([
-            #     html.P(message, style={'margin': '5px 0', 'font-weight': 'bold'}),
-            #     html.P(f'Число итераций: {iteration}', style={'margin': '5px 0'}),
-            #     html.P(f'Точка минимума: ({x:.6f}, {y:.6f})', style={'margin': '5px 0'}),  
-            #     html.P(f'Значение функции: {func_value:.6f}', style={'margin': '5px 0', 'font-weight': 'bold'}),
-            # ])
+            result_text = html.Div([
+                html.P(message, style={'margin': '5px 0', 'font-weight': 'bold'}),
+                html.P(f'Число итераций: {iteration}', style={'margin': '5px 0'}),
+                html.P(f'Точка минимума: ({x:.6f}, {y:.6f})', style={'margin': '5px 0'}),  
+                html.P(f'Значение функции: {func_value:.6f}', style={'margin': '5px 0', 'font-weight': 'bold'}),
+            ])
             
             fig = generate_3d_surface(func=func, path=path)
             
@@ -515,7 +520,7 @@ def register_callbacks(app):
                         "iteration": item["iteration"],
                         "x": item["x"],
                         "y": item["y"],
-                        "f_value": -item["f_value"]
+                        "f_value": item["f_value"]
                     }
                     for item in history
                 ],
@@ -523,9 +528,9 @@ def register_callbacks(app):
                 style_cell={'padding': '10px', 'textAlign': 'center'},
                 style_header={'backgroundColor': '#f1f1f1', 'fontWeight': 'bold'}
             )
-            return "yes", fig, table
+            return result_text, fig, table
         else:
-            return html.Div("no", style={'color': 'red'}), fig, None
+            return html.Div(result_text, style={'color': 'red'}), fig, None
         
 
         

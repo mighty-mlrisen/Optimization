@@ -22,22 +22,15 @@ def simple_ais_iteration(func, population, n_b, n_c,n_d, alpha, bounds):
     #  Из текущей популяции выбираем n_b антител с максимальной BG-аффинностью
     indices_sorted = np.argsort(fitness)
     best_indices = indices_sorted[:n_b]
-    best_ants = population[best_indices] 
-    best_fitnesses = fitness[best_indices] 
-    
-    f_min = best_fitnesses.min()
-    f_max = best_fitnesses.max()
+    best_ants = population[best_indices]  
     
     clones = []
-    epsilon=1e-8
+    
     for i in range(n_b):
-        alpha_i = alpha * (1 - (best_fitnesses[i] - f_min) / (f_max - f_min + epsilon))
-        #alpha_i = alpha * ((best_fitnesses[i] - f_min) / (f_max - f_min + epsilon))
         original = best_ants[i]
-        
         for _ in range(n_c):
             # Мутация 
-            mutation = alpha_i * (np.random.rand(dim) - 0.5)
+            mutation = alpha * (np.random.rand(dim) - 0.5)
             clone = original + mutation
             clone = np.clip(clone, bounds[0], bounds[1])
             clones.append(clone)
@@ -80,11 +73,13 @@ def ais_optimize(func, dim, pop_size=30, n_b=5, n_c=10,n_d=5, alpha=0.5,
     tol = 1e-6
     no_improve = 0
     history = []
+
+    delta = alpha / generations
     
     for iter in range(generations):
         # Выполняем итерацию
         population, best_fitness, best_sol = simple_ais_iteration(
-            func, population, n_b, n_c,n_d, alpha, bounds
+            func, population, n_b, n_c, n_d, alpha, bounds
         )
 
         if  prev_best_fitness is None or abs(best_fitness - prev_best_fitness) < tol:
@@ -101,10 +96,16 @@ def ais_optimize(func, dim, pop_size=30, n_b=5, n_c=10,n_d=5, alpha=0.5,
             'y': best_sol[1],
             'f_value': best_fitness
         })
+        
+        alpha -= delta
 
         prev_best_fitness = best_fitness
     
-    return history
+    converged = True
+    if converged:
+        message = f"Минимальное значение функции f(x) = {history[-1]['f_value']} найдено в точке ({history[-1]['x']}; {history[-1]['y']})."
+    
+    return history, converged, message
 
 
 if __name__ == "__main__":
@@ -117,7 +118,7 @@ if __name__ == "__main__":
     bounds = (-5, 5)
     generations = 100
     
-    history = ais_optimize(
+    history, converged, message = ais_optimize(
         rosenbrock,
         dim,
         pop_size=pop_size,
