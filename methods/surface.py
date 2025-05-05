@@ -1,3 +1,4 @@
+
 import numpy as np
 import plotly.graph_objects as go
 
@@ -55,7 +56,8 @@ def generate_3d_surface(
         scene=dict(
             xaxis_title="x₁",
             yaxis_title="x₂",
-            zaxis_title="f(x₁, x₂)"
+            zaxis_title="f(x₁, x₂)",
+            aspectmode="cube"
         ),
         height=700,
         margin=dict(l=0, r=0, b=0, t=30)
