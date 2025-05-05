@@ -6,8 +6,11 @@ import numpy as np
 def initialize_population(population_size, x_min, x_max):
     return np.random.uniform(x_min, x_max, (population_size, 2))
 
-def chemotaxis(bacteria, func, step_size, population_size, x_min, x_max, health):
+def chemotaxis(bacteria, func, step_size, population_size, x_min, x_max, health, chemotaxis_count,t_chemotaxis):
     """Локальный поиск с плаванием и кувырканием"""
+    if chemotaxis_count >= t_chemotaxis:
+        return bacteria
+    
     new_bacteria = np.copy(bacteria)
     fitness = np.array([func(b) for b in bacteria])
     
@@ -32,8 +35,11 @@ def chemotaxis(bacteria, func, step_size, population_size, x_min, x_max, health)
     
     return new_bacteria
 
-def reproduction(bacteria, func, population_size,health):
+def reproduction(bacteria, func, population_size,health,reproduction_count,t_reproduction):
     """Размножение наиболее успешных бактерий"""
+
+    if reproduction_count >= t_reproduction:
+        return bacteria
     # Вычисляем "здоровье" каждой бактерии (сумму значений функции)
     #health = np.array([func(b) for b in bacteria])
     
@@ -48,8 +54,12 @@ def reproduction(bacteria, func, population_size,health):
     
     return new_population
 
-def elimination_dispersal(bacteria, elimination_num, elimination_prob, population_size, x_min, x_max):
+def elimination_dispersal(bacteria, elimination_num, elimination_prob, population_size, x_min, x_max,elimination_count,t_elimination):
     """Уничтожение и случайное перемещение части бактерий"""
+
+    if elimination_count >= t_elimination:
+        return bacteria
+    
     new_bacteria = np.copy(bacteria)
     
     for _ in range(elimination_num):
@@ -79,32 +89,33 @@ def bacterial_foraging_optimization(
     best_fitness = -np.inf
 
     history = []
+    chemotaxis_count = 0
+    reproduction_count = 0
+    elimination_count = 0
 
-    # Основной цикл алгоритма
-    for l in range(t_elimination):
-        for r in range(t_reproduction):
-            health = np.array([func(b) for b in bacteria]) #тест
-            for t in range(t_chemotaxis):
-                # Хемотаксис
-                bacteria = chemotaxis(bacteria, func, step_size * (1 - t/t_chemotaxis), population_size, x_min, x_max, health)
-                
-                # Обновляем лучшее решение
-                current_fitness = np.array([func(b) for b in bacteria])
-                best_idx = np.argmax(current_fitness)
-                if current_fitness[best_idx] > best_fitness:
-                    best_fitness = current_fitness[best_idx]
-                    best_solution = bacteria[best_idx]
-                history.append({
+    iter = 0
+    for i in range(t_chemotaxis):
+        health = np.array([func(b) for b in bacteria]) 
+        bacteria = chemotaxis(bacteria, func, step_size * (1 - i/t_chemotaxis), population_size, x_min, x_max, health,chemotaxis_count,t_chemotaxis)
+        bacteria = reproduction(bacteria, func, population_size, health,reproduction_count,t_reproduction)
+        bacteria = elimination_dispersal(bacteria, elimination_num, elimination_prob, population_size, x_min, x_max,elimination_count,t_elimination)
+
+        current_fitness = np.array([func(b) for b in bacteria])
+        best_idx = np.argmax(current_fitness)
+        if current_fitness[best_idx] > best_fitness:
+                 best_fitness = current_fitness[best_idx]
+                 best_solution = bacteria[best_idx]
+        history.append({
+                    "iteration": iter + 1,
                     "x": best_solution[0],
                     "y": best_solution[1],
                     "f_value": best_fitness
                 })
-            
-            # Репродукция
-            bacteria = reproduction(bacteria, func, population_size, health)
-        
-        # Ликвидация и рассеивание
-        bacteria = elimination_dispersal(bacteria, elimination_num, elimination_prob, population_size, x_min, x_max)
+        chemotaxis_count += 1
+        reproduction_count += 1
+        elimination_count += 1
+
+        iter += 1           
     
     #message = f"Оптимум f(x,y)={best_fitness} найден в точке ({best_solution[0]}, {best_solution[1]})."
     message = "Оптимум найден"

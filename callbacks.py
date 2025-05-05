@@ -9,6 +9,8 @@ from methods.genetic_algorithm import genetic_algorithm
 from methods.particle_swarm import particle_swarm
 from methods.bee_algorithm import bee_algorithm
 from methods.ais_algorithm import ais_optimize
+from methods.bfo import bacterial_foraging_optimization
+#from methods.bfo_test import bacterial_foraging_optimization
 from layouts.layout import *
 from methods.surface import generate_3d_surface
 from dash.exceptions import PreventUpdate
@@ -24,6 +26,8 @@ def functions(function_name):
             return lambda x, y: 418.9829 * 2 - (x * np.sin(np.sqrt(np.abs(x))) + y * np.sin(np.sqrt(np.abs(y))))
         case "himmelblau":
             return lambda x, y: (x**2 + y - 11)**2 + (x + y**2 - 7)**2
+        case "negative_sphere_function":
+            return lambda x, y: -(x**2 + y**2)
 
 def register_callbacks(app):
     # смена страницы задания
@@ -45,6 +49,8 @@ def register_callbacks(app):
                 return layout_task5
             case 'task6':
                 return layout_task6
+            case 'task7':
+                return layout_task7
             case _:
                 return html.Div("Задача не найдена")
     
@@ -531,6 +537,94 @@ def register_callbacks(app):
             return result_text, fig, table
         else:
             return html.Div(result_text, style={'color': 'red'}), fig, None
+        
+
+
+    # Бактериальный алгоритм 
+    @app.callback(
+        [Output('bfo-result-output', 'children'),
+         Output('bfo-plot', 'figure'),
+         Output('bfo-table', 'children')],
+        [Input('run-button', 'n_clicks')],
+        [Input('bfo-function', 'value'),
+         Input('bfo-pop-size', 'value'),
+         Input('bfo-range1', 'value'),
+         Input('bfo-range2', 'value'),
+         Input('bfo-t-chem', 'value'),
+         Input('bfo-t-rep', 'value'),
+         Input('bfo-t-elim', 'value'),
+         Input('bfo-step-size', 'value'),
+         Input('bfo-elim-prob', 'value'),
+         Input('bfo-elim-num', 'value')
+         ]
+    )
+    def run_bfo_algorithm(n_clicks, func, pop_size,range1, range2, t_chemotaxis, t_reproduction, t_elimination, step_size, elimination_prob, elimination_num):
+        
+        func = functions(func)
+
+        wrapped_func = lambda point: func(point[0], point[1])
+        
+        fig = generate_3d_surface(func=func)
+        bounds = [range1, range2]
+        
+        if n_clicks is None or n_clicks == 0:
+            return "", fig, None 
+        
+        history, converged, message = bacterial_foraging_optimization(
+            wrapped_func,
+            pop_size,
+            bounds,
+            t_chemotaxis,
+            t_reproduction,
+            t_elimination,
+            step_size,
+            elimination_prob,
+            elimination_num
+        )
+        
+        last_item = history[-1]
+        x = last_item['x']
+        y = last_item['y']
+        func_value = last_item['f_value'] 
+        #iteration = last_item['iteration']
+        
+        if converged == True:
+            path = [(item['x'], item['y']) for item in history]
+            
+            result_text = html.Div([
+                html.P(message, style={'margin': '5px 0', 'font-weight': 'bold'}),
+                #html.P(f'Число итераций: {iteration}', style={'margin': '5px 0'}),
+                html.P(f'Точка максимума: ({x:.6f}, {y:.6f})', style={'margin': '5px 0'}),  
+                html.P(f'Значение функции: {func_value:.6f}', style={'margin': '5px 0', 'font-weight': 'bold'}),
+            ])
+            
+            fig = generate_3d_surface(func=func, path=path)
+            
+            table = dash_table.DataTable(
+                columns=[
+                    {'name': 'Итерация', 'id': 'iteration', 'type': 'numeric'},
+                    {'name': 'x', 'id': 'x', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                    {'name': 'y', 'id': 'y', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                    {'name': 'Значение функции', 'id': 'f_value', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                ],
+                data=[
+                    {
+                        #"iteration": item["iteration"],
+                        "iteration": i,
+                        "x": item["x"],
+                        "y": item["y"],
+                        "f_value": item["f_value"]
+                    }
+                    #for item in history
+                    for i, item in enumerate(history, start=1)
+                ],
+                style_table={'height': '350px', 'overflowY': 'auto'},
+                style_cell={'padding': '10px', 'textAlign': 'center'},
+                style_header={'backgroundColor': '#f1f1f1', 'fontWeight': 'bold'}
+            )
+            return result_text, fig, table
+        else:
+            return html.Div(result_text, style={'color': 'red'}), fig, None   
         
 
         

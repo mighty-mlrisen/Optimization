@@ -5,6 +5,7 @@ from layouts.layout3 import *
 from layouts.layout4 import *
 from layouts.layout5 import *
 from layouts.layout6 import *
+from layouts.layout7 import *
 
 layout = html.Div(
     style={
@@ -36,6 +37,7 @@ layout = html.Div(
                         {'label': 'Алгоритм роя частиц', 'value': 'task4'},
                         {'label': 'Алгоритм пчёл', 'value': 'task5'},
                         {'label': 'Алгоритм искусственной имунной сети', 'value': 'task6'},
+                        {'label': 'Алгоритм бактериальной оптимизации', 'value': 'task7'},
                     ],
                     value='task1',
                     style={

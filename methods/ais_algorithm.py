@@ -30,7 +30,7 @@ def simple_ais_iteration(func, population, n_b, n_c,n_d, alpha, bounds):
         original = best_ants[i]
         for _ in range(n_c):
             # Мутация 
-            mutation = alpha * (np.random.rand(dim) - 0.5)
+            mutation = alpha * (np.random.rand(dim) - 0.8)
             clone = original + mutation
             clone = np.clip(clone, bounds[0], bounds[1])
             clones.append(clone)
@@ -66,7 +66,6 @@ def simple_ais_iteration(func, population, n_b, n_c,n_d, alpha, bounds):
 def ais_optimize(func, dim, pop_size=30, n_b=5, n_c=10,n_d=5, alpha=0.5,
                  bounds=(-5, 5), generations=50, verbose=True):
     
-    # Инициализируем популяцию
     population = np.random.uniform(bounds[0], bounds[1], (pop_size, dim))
 
     prev_best_fitness = None
@@ -77,7 +76,6 @@ def ais_optimize(func, dim, pop_size=30, n_b=5, n_c=10,n_d=5, alpha=0.5,
     delta = alpha / generations
     
     for iter in range(generations):
-        # Выполняем итерацию
         population, best_fitness, best_sol = simple_ais_iteration(
             func, population, n_b, n_c, n_d, alpha, bounds
         )
@@ -149,3 +147,7 @@ if __name__ == "__main__":
         func_value = item['f_value']
         print(f"{iteration:<12} {x:<15} {y:<15} {func_value:<15}")
      """
+
+
+
+
