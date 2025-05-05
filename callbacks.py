@@ -10,7 +10,6 @@ from methods.particle_swarm import particle_swarm
 from methods.bee_algorithm import bee_algorithm
 from methods.ais_algorithm import ais_optimize
 from methods.bfo import bacterial_foraging_optimization
-#from methods.bfo_test import bacterial_foraging_optimization
 from layouts.layout import *
 from methods.surface import generate_3d_surface
 from dash.exceptions import PreventUpdate
