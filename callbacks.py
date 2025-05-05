@@ -585,14 +585,14 @@ def register_callbacks(app):
         x = last_item['x']
         y = last_item['y']
         func_value = last_item['f_value'] 
-        #iteration = last_item['iteration']
+        iteration = last_item['iteration']
         
         if converged == True:
             path = [(item['x'], item['y']) for item in history]
             
             result_text = html.Div([
                 html.P(message, style={'margin': '5px 0', 'font-weight': 'bold'}),
-                #html.P(f'Число итераций: {iteration}', style={'margin': '5px 0'}),
+                html.P(f'Число итераций: {iteration}', style={'margin': '5px 0'}),
                 html.P(f'Точка максимума: ({x:.6f}, {y:.6f})', style={'margin': '5px 0'}),  
                 html.P(f'Значение функции: {func_value:.6f}', style={'margin': '5px 0', 'font-weight': 'bold'}),
             ])
@@ -608,14 +608,12 @@ def register_callbacks(app):
                 ],
                 data=[
                     {
-                        #"iteration": item["iteration"],
-                        "iteration": i,
+                        "iteration": item["iteration"],
                         "x": item["x"],
                         "y": item["y"],
                         "f_value": item["f_value"]
                     }
-                    #for item in history
-                    for i, item in enumerate(history, start=1)
+                    for item in history
                 ],
                 style_table={'height': '350px', 'overflowY': 'auto'},
                 style_cell={'padding': '10px', 'textAlign': 'center'},
