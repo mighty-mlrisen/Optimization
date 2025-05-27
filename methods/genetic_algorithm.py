@@ -29,8 +29,8 @@ def genetic_algorithm(objective_func, bounds, used_methods={"crossover": True, "
         # Критерий остановки
         if abs(current_value - best_fitness) < tol:
             no_improve += 1
-            if no_improve >= patience:
-                break
+            #if no_improve >= patience:
+                #break
         elif current_value < best_fitness:
             no_improve = 0
             best_fitness = current_value
@@ -108,6 +108,6 @@ def genetic_algorithm(objective_func, bounds, used_methods={"crossover": True, "
     converged = True
     message = "Оптимум найден" if converged else "Достигнуто максимальное количество итераций"
     
-    return history, converged, message
+    return history, converged, message, population
 
 #genetic_algorithm(lambda x,y: x + y, [[-3,3],[-3,3]])

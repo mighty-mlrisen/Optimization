@@ -12,6 +12,7 @@ from methods.ais_algorithm import ais_optimize
 from methods.bfo import bacterial_foraging_optimization
 from layouts.layout import *
 from methods.surface import generate_3d_surface
+from methods.hybrid import hybrid_optimize
 from dash.exceptions import PreventUpdate
 
 def functions(function_name):
@@ -27,6 +28,8 @@ def functions(function_name):
             return lambda x, y: (x**2 + y - 11)**2 + (x + y**2 - 7)**2
         case "negative_sphere_function":
             return lambda x, y: -(x**2 + y**2)
+        case "sphere":
+            return lambda x, y: x**2 + y**2
 
 def register_callbacks(app):
     # смена страницы задания
@@ -50,6 +53,8 @@ def register_callbacks(app):
                 return layout_task6
             case 'task7':
                 return layout_task7
+            case 'task8':
+                return layout_task8
             case _:
                 return html.Div("Задача не найдена")
     
@@ -234,7 +239,7 @@ def register_callbacks(app):
         if n_clicks is None or n_clicks == 0:
             return "", fig, None 
         
-        history, converged, message = genetic_algorithm(
+        history, converged, message, population = genetic_algorithm(
             func, bounds, used_methods, population_size, 
             crossover_prob, mutation_prob, mutation_param, max_iter
             )
@@ -314,6 +319,7 @@ def register_callbacks(app):
             [x01, y01],
             [x02, y02]
         ]
+
         
         if n_clicks is None or n_clicks == 0:
             return "", fig, None 
@@ -625,5 +631,95 @@ def register_callbacks(app):
         
 
         
+    #гибридный алгоритм
+    @app.callback(
+        [Output('gib-result-output', 'children'),
+         Output('gib-plot', 'figure'),
+         Output('gib-table', 'children')],
+        [Input('run-button', 'n_clicks')],
+        [Input('gib-function', 'value'),
+         Input('gib-ga-size', 'value'),
+         Input('gib-ga-maxiter', 'value'),
+         Input('gib-x01', 'value'),
+         Input('gib-x02', 'value'),
+         Input('gib-y01', 'value'),
+         Input('gib-y02', 'value'),
+         Input('gib-ga-crossover-prob', 'value'),
+         Input('gib-ga-mutation-prob', 'value'),
+         Input('gib-ga-mutation-param', 'value'),
+         Input('gib-ps-size', 'value'),
+         Input('gib-ps-maxiter', 'value'),
+         Input('gib-ps-current-velocity-ratio', 'value'),
+         Input('gib-ps-local-velocity-ratio', 'value'),
+         Input('gib-ps-global-velocity-ratio', 'value'), 
+         Input('gib-ps-penalty-ratio', 'value'),
+         ]
+    )
+    
+    def run_hybrid_algorithm(n_clicks, function, ga_population_size, ga_max_iter, x01, x02, y01, y02, crossover_prob, mutation_prob, mutation_param,ps_population_size, ps_max_iter, current_velocity_ratio, local_velocity_ratio, global_velocity_ratio, penalty_ratio ):
+        func = functions(function)
+        fig = generate_3d_surface(func=func)
         
+        ga_bounds = [
+            [x01, x02],
+            [y01, y02]
+        ]
+        ps_bounds = [
+            [x01, y01],
+            [x02, y02]
+        ]
+        
+        if n_clicks is None or n_clicks == 0:
+            return "", fig, None 
+        
+        history, converged, message, iter = hybrid_optimize(
+            func, ga_bounds, ps_bounds, ga_population_size,
+            crossover_prob, mutation_prob, mutation_param,
+            ga_max_iter, ps_population_size, ps_max_iter,
+            current_velocity_ratio, local_velocity_ratio, global_velocity_ratio, penalty_ratio
+            )
+        
+        last_item = history[-1]
+        x = last_item['x']
+        y = last_item['y']
+        func_value = last_item['f_value'] 
+        iteration = last_item['iteration']
+        
+        if converged == True:
+            path = [(item['x'], item['y']) for item in history]
+            
+            result_text = html.Div([
+                html.P(message, style={'margin': '5px 0', 'font-weight': 'bold'}),
+                html.P(f'Общее число итераций: {iteration}', style={'margin': '5px 0'}),
+                html.P(f'Число итераций генетического алгоритма: {iter}', style={'margin': '5px 0'}),
+                html.P(f'Число итераций алгоритма роя частиц: {iteration - iter}', style={'margin': '5px 0'}),
+                html.P(f'Точка минимума: ({x:.6f}, {y:.6f})', style={'margin': '5px 0'}),  
+                html.P(f'Значение функции: {func_value:.6f}', style={'margin': '5px 0', 'font-weight': 'bold'}),
+            ])
+            
+            fig = generate_3d_surface(func=func, path=path)
+            
+            table = dash_table.DataTable(
+                columns=[
+                    {'name': 'Итерация', 'id': 'iteration', 'type': 'numeric'},
+                    {'name': 'x', 'id': 'x', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                    {'name': 'y', 'id': 'y', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                    {'name': 'Значение функции', 'id': 'f_value', 'type': 'numeric', 'format': {'specifier': '.6f'}},
+                ],
+                data=[
+                    {
+                        "iteration": item["iteration"],
+                        "x": item["x"],
+                        "y": item["y"],
+                        "f_value": item["f_value"]
+                    }
+                    for item in history
+                ],
+                style_table={'height': '350px', 'overflowY': 'auto'},
+                style_cell={'padding': '10px', 'textAlign': 'center'},
+                style_header={'backgroundColor': '#f1f1f1', 'fontWeight': 'bold'}
+            )
+            return result_text, fig, table
+        else:
+            return html.Div(message, style={'color': 'red'}), fig, None    
 

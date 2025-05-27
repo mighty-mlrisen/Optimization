@@ -4,6 +4,8 @@ import numpy
 import numpy.random
 
 from methods.particleswarm.particle import Particle
+#from particleswarm.particle import Particle
+
 
 
 class Swarm (object):
@@ -103,6 +105,10 @@ class Swarm (object):
     @property
     def globalBestFinalFunc (self):
         return self.__globalBestFinalFunc
+    
+    @property
+    def getSwarm (self):
+        return self.__swarm
 
 
     def getFinalFunc (self, position):

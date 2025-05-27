@@ -58,7 +58,7 @@ layout_task7 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Размер популяции:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bfo-pop-size', type='number', placeholder='50', value=50, style=input_style, required=True),
+                                dcc.Input(id='bfo-pop-size', type='number', placeholder='10', value=50, style=input_style, required=True),
                             ]
                         ),
 
@@ -75,7 +75,7 @@ layout_task7 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Число шагов хемотаксиса:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bfo-t-chem', type='number', placeholder='10', value=100, style=input_style, required=True),
+                                dcc.Input(id='bfo-t-chem', type='number', placeholder='10', value=30, style=input_style, required=True),
                             ]
                         ),
 
@@ -83,7 +83,7 @@ layout_task7 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Число шагов репродукции:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bfo-t-rep', type='number', placeholder='5', value=5, style=input_style, required=True),
+                                dcc.Input(id='bfo-t-rep', type='number', placeholder='5', value=10, style=input_style, required=True),
                             ]
                         ),
 
@@ -91,7 +91,7 @@ layout_task7 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Число шагов ликвидации:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='bfo-t-elim', type='number', placeholder='5', value=2, style=input_style, required=True),
+                                dcc.Input(id='bfo-t-elim', type='number', placeholder='5', value=10, style=input_style, required=True),
                             ]
                         ),
 

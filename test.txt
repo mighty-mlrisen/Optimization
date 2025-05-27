@@ -150,3 +150,56 @@ class Swarm (object):
         return self.__func(position) + self._getPenalty(position)
 
 
+
+
+
+
+
+def functions(function_name):
+    s = function_name.lower()
+    match s:
+        case "rosenbrock":
+            return lambda x, y: (1-x)**2 + 100*((y-x**2)**2)
+        case "bukin":
+            return lambda x, y: 100*np.sqrt(abs(y-0.01*(x**2))) + 0.01*abs(x+10)
+        case "himmelblau":
+            return lambda x, y: (x**2 + y -11)**2 + (x + y**2 - 7)**2
+        case "isom":
+            return lambda x, y: -np.cos(x)*np.cos(y)*np.exp(-((x-np.pi)**2 + (y-np.pi)**2))
+        case "rastrigin":
+            return lambda x, y: 20 + (x**2 - 10*np.cos(2*np.pi*x)) + (y**2 - 10*np.cos(2*np.pi*y))
+        case "goldstein_price":
+            return lambda x, y: (1 + ((x+y+1)**2)*(19-14*x+3*(x**2)-14*y+6*x*y+3*(y**2)))*(30 + ((2*x-3*y)**2)*(18-32*x+12*(x**2)+48*y-36*x*y+27*(y**2)))
+        case "cross_in_tray":
+            return lambda x, y: -0.0001 * ((abs(np.sin(x)*np.sin(y)*np.exp(abs(100 - (np.sqrt(x**2+y**2)/np.pi)))) + 1)**0.1)
+        case "sphere":
+            return lambda x, y: x**2 + y**2
+        
+
+# Конфигурация тестовых функций
+global_minima = {
+    "rosenbrock": ((1, 1), 0),
+    "himmelblau": ((3.0, 2.0), 0),
+    "isom": ((np.pi, np.pi), -1),
+    "sphere": ((0, 0), 0),
+    "rastrigin": ((0, 0), 0),
+    "bukin": ((-10, 1), 0)
+}
+
+test_config = {
+    "rosenbrock": {"bounds": [[-5, 5], [-5, 5]]},
+    "himmelblau": {"bounds": [[-5, 5], [-5, 5]]},
+    "isom": {"bounds": [[0, 6], [0, 6]]},
+    "sphere": {"bounds": [[-5, 5], [-5, 5]]},
+    "rastrigin": {"bounds": [[-5.12, 5.12], [-5.12, 5.12]]},
+    "bukin": {"bounds": [[-15, -5], [-3, 3]]}
+}
+
+test_config2 = {
+    "rosenbrock": {"bounds": [[-5, -5], [5, 5]]},
+    "himmelblau": {"bounds": [[-5, -5], [5, 5]]},
+    "isom": {"bounds": [[0, 0], [6, 6]]},
+    "sphere": {"bounds": [[-5, -5], [5, 5]]},
+    "rastrigin": {"bounds": [[-5.12, -5.12], [5.12, 5.12]]},
+    "bukin": {"bounds": [[-15, -3], [-5, 3]]}
+}

@@ -44,7 +44,8 @@ layout_task4 = html.Div(
                                 {'label': 'Функция Розенброка', 'value': 'rosenbrock'},
                                 {'label': 'Функция Растригина', 'value': 'rastrygin'},
                                 {'label': 'Функция Швефеля', 'value': 'schwefel'},
-                                {'label': 'Функция Химмельблау', 'value': 'himmelblau'}
+                                {'label': 'Функция Химмельблау', 'value': 'himmelblau'},
+                                {'label': 'Функция Сферы', 'value': 'sphere'}
                             ],
                             value='rosenbrock',
                             style={

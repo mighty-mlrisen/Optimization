@@ -1,7 +1,7 @@
 from dash import html, dcc
 from layouts.styles import *
 
-layout_task3 = html.Div(
+layout_task8 = html.Div(
     style={
         'font-family': 'Arial, sans-serif',
         'padding': '20px',
@@ -33,13 +33,13 @@ layout_task3 = html.Div(
                         'flex-direction': 'column'
                     },
                     children=[
-                        html.H3("Генетический алгоритм", style={
+                        html.H3("Гибридный алгоритм", style={
                             'margin-bottom': '20px',
                             'color': '#333'
                         }),
 
                         dcc.Dropdown(
-                            id='ga-function',
+                            id='gib-function',
                             options=[
                                 {'label': 'Функция Розенброка', 'value': 'rosenbrock'},
                                 {'label': 'Функция Растригина', 'value': 'rastrygin'},
@@ -58,15 +58,15 @@ layout_task3 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Количество хромосом:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='ga-chroms', type='number', placeholder='x10', value=100, style=input_style, required=True),
+                                dcc.Input(id='gib-ga-size', type='number', placeholder='x10', value=100, style=input_style, required=True),
                             ]
                         ),
 
                         html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
-                                html.Label("Макс. итераций:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='ga-maxiter', type='number', placeholder='x20', value=100, style=input_style, required=True),
+                                html.Label("Макс. итераций для генетического:", style={'margin': '10px', 'margin-left': '0px'}),
+                                dcc.Input(id='gib-ga-maxiter', type='number', placeholder='x20', value=100, style=input_style, required=True),
                             ]
                         ),
 
@@ -74,8 +74,8 @@ layout_task3 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Интервал поиска по x:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='ga-x01', type='number', placeholder='a1', value=-3, style=input_style, required=True),
-                                dcc.Input(id='ga-x02', type='number', placeholder='a1', value=3, style=input_style, required=True),
+                                dcc.Input(id='gib-x01', type='number', placeholder='a1', value=-3, style=input_style, required=True),
+                                dcc.Input(id='gib-x02', type='number', placeholder='a1', value=3, style=input_style, required=True),
                             ]
                         ),
 
@@ -83,8 +83,8 @@ layout_task3 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Интервал поиска по y:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='ga-y01', type='number', placeholder='a1', value=-3, style=input_style, required=True),
-                                dcc.Input(id='ga-y02', type='number', placeholder='a1', value=3, style=input_style, required=True),
+                                dcc.Input(id='gib-y01', type='number', placeholder='a1', value=-3, style=input_style, required=True),
+                                dcc.Input(id='gib-y02', type='number', placeholder='a1', value=3, style=input_style, required=True),
                             ]
                         ),
 
@@ -92,7 +92,7 @@ layout_task3 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Вероятность скрещивания:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='ga-crossover-prob', type='number', placeholder='a3', value=0.7, style=input_style, required=True),
+                                dcc.Input(id='gib-ga-crossover-prob', type='number', placeholder='a3', value=0.7, style=input_style, required=True),
                             ]
                         ),
 
@@ -100,7 +100,7 @@ layout_task3 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Вероятность мутации:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='ga-mutation-prob', type='number', placeholder='a4', value=0.1, style=input_style, required=True),
+                                dcc.Input(id='gib-ga-mutation-prob', type='number', placeholder='a4', value=0.1, style=input_style, required=True),
                             ]
                         ),
 
@@ -108,36 +108,68 @@ layout_task3 = html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
                                 html.Label("Параметр мутации:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Input(id='ga-mutation-param', type='number', placeholder='a5', value=3, style=input_style, required=True),
+                                dcc.Input(id='gib-ga-mutation-param', type='number', placeholder='a5', value=3, style=input_style, required=True),
                             ]
                         ),
                         
                         html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
-                                html.Label("Использовать скрещивание:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Checklist(
-                                    id='ga-use-cross',
-                                    options=[{'label': '', 'value': 'crossover'}],
-                                    value=['crossover'],
-                                    style={'margin-left': '10px'}
-                                ),
+                                html.Label("Размер роя:", style={'margin': '10px', 'margin-left': '0px'}),
+                                dcc.Input(id='gib-ps-size', type='number', placeholder='x20', value=70, style=input_style, required=True),
                             ]
                         ),
                         
                         html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
                             children=[
-                                html.Label("Использовать мутации:", style={'margin': '10px', 'margin-left': '0px'}),
-                                dcc.Checklist(
-                                    id='ga-use-mutation',
-                                    options=[{'label': '', 'value': 'mutation'}],
-                                    value=['mutation'],
-                                    style={'margin-left': '10px'}
+                                html.Label("Макс. итераций для роя частиц:", style={'margin': '10px', 'margin-left': '0px'}),
+                                dcc.Input(id='gib-ps-maxiter', type='number', placeholder='x10', value=100, style=input_style, required=True),
+                            ]
+                        ),
+
+                        html.Div(
+                            style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
+                            children=[
+                                html.Label("Коэффициент k (0,1):", style={'margin': '10px', 'margin-left': '0px'}),
+                                dcc.Input(
+                                    id='gib-ps-current-velocity-ratio',
+                                    type='number',
+                                    placeholder='a3',
+                                    value=0.5,
+                                    style=input_style,
+                                    required=True,
+                                    min=0,  # Минимальное значение
+                                    max=1,  # Максимальное значение
+                                 
                                 ),
                             ]
                         ),
-                        
+
+                        html.Div(
+                            style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
+                            children=[
+                                html.Label("Локальный коэффициент скорости:", style={'margin': '10px', 'margin-left': '0px'}),
+                                dcc.Input(id='gib-ps-local-velocity-ratio', type='number', placeholder='a4', value=2, style=input_style, required=True),
+                            ]
+                        ),
+
+                        html.Div(
+                            style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
+                            children=[
+                                html.Label("Глобальный коэффициент скорости:", style={'margin': '10px', 'margin-left': '0px'}),
+                                dcc.Input(id='gib-ps-global-velocity-ratio', type='number', placeholder='a5', value=5, style=input_style, required=True),
+                            ]
+                        ),
+
+                        html.Div(
+                            style={'display': 'flex', 'align-items': 'center', 'margin-bottom': '5px'},
+                            children=[
+                                html.Label("Коэффициент штрафа:", style={'margin': '10px', 'margin-left': '0px'}),
+                                dcc.Input(id='gib-ps-penalty-ratio', type='number', placeholder='a5', value=10000, style=input_style, required=True),
+                            ]
+                        ),
+
                         html.Button('Запуск', id='run-button', style=button_style),
                     
                     ]
@@ -147,7 +179,7 @@ layout_task3 = html.Div(
                 html.Div(
                     style=graph_style,
                     children=[
-                        dcc.Graph(id='ga-plot', style={'width': '100%', 'height': '100%'}),
+                        dcc.Graph(id='gib-plot', style={'width': '100%', 'height': '100%'}),
                     ]
                 ),
             ]
@@ -157,11 +189,11 @@ layout_task3 = html.Div(
         html.Div(
             style=bottom_style,
             children=[
-                html.Div(id='ga-result-output', style={
+                html.Div(id='gib-result-output', style={
                     'margin-bottom': '20px',
                     'font-size': '16px',
                 }),
-                html.Div(id='ga-table', style={
+                html.Div(id='gib-table', style={
                     'width': '100%',
                     'overflowX': 'auto',
                 }),

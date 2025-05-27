@@ -25,11 +25,32 @@ class Particle (object):
     @property
     def position (self):
         return self.__currentPosition
+    
+    @position.setter
+    def position(self, value):
+        self.__currentPosition = value
 
 
     @property
     def velocity (self):
         return self.__velocity
+    
+    @property
+    def localBestPosition(self):
+        return self.__localBestPosition
+    
+    @localBestPosition.setter
+    def localBestPosition(self, value):
+        self.__localBestPosition = value
+    
+    @property
+    def localBestFinalFunc(self):
+        return self.__localBestFinalFunc
+
+    @localBestFinalFunc.setter
+    def localBestFinalFunc(self, value):
+        self.__localBestFinalFunc = value
+    
 
 
     def __getInitPosition (self, swarm):
